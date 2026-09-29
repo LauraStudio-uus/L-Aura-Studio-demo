@@ -3,7 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="D+Đ Studio - Photography Studio hiện đại, tối giản và nghệ thuật.">
+  <meta name="description" content="L'Aura Studio — Creative photography studio tại Việt Nam chuyên portrait, fashion, beauty, wedding và brand campaign.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#f7f3eb">
+  <script>
+    (() => {
+      try {
+        const saved = localStorage.getItem("lauraTheme");
+        const dark = saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+      } catch (_) {
+        document.documentElement.dataset.theme = "light";
+      }
+    })();
+  </script>
+  <meta property="og:title" content="L'Aura Studio — Photography">
+  <meta property="og:description" content="Portrait · Fashion · Beauty · Wedding · Brand Campaign">
+  <meta property="og:type" content="website">
   <title>L'Aura Studio — Photography</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,6 +29,7 @@
 </head>
 
 <body>
+  <a class="skip-link" href="#home">Bỏ qua đến nội dung chính</a>
   
   <div class="cursor"></div>
 
@@ -33,6 +50,10 @@
   <a class="header-btn" href="#booking">
     Đặt lịch <span>↗</span>
   </a>
+
+  <button type="button" class="theme-toggle" id="themeToggle" aria-label="Chuyển sang chế độ tối" title="Đổi giao diện sáng/tối">
+    <span class="theme-toggle-icon" id="themeIcon" aria-hidden="true">☾</span>
+  </button>
 
   
 <div class="account-modal" id="accountModal">
@@ -185,13 +206,15 @@
 
 </div>
 
-  <button class="account-btn" id="accountOpen">
+  <button type="button" class="account-btn" id="accountOpen" aria-label="Mở tài khoản">
     Tài khoản
   </button>
 
-  <button class="admin-link" id="adminOpen">
+  <button type="button" class="admin-link" id="adminOpen" aria-label="Mở trang quản trị">
     Admin
   </button>
+
+  
 
 </div>
 
@@ -225,7 +248,7 @@
           <h2>Hình ảnh có<br><em>cảm xúc.</em></h2>
         </div>
         <div class="intro-copy">
-          <p class="lead">D+Đ là một creative photography studio tập trung vào chân dung, thời trang, beauty và hình ảnh thương hiệu.</p>
+          <p class="lead">L’Aura là một creative photography studio tập trung vào chân dung, thời trang, beauty và hình ảnh thương hiệu.</p>
           <p>Chúng tôi kết hợp ánh sáng, bố cục, màu sắc và direction để biến ý tưởng thành hình ảnh có cá tính riêng.</p>
           <a href="#contact" class="underline-link">Làm việc cùng chúng tôi ↗</a>
         </div>
@@ -261,7 +284,6 @@
           <b>↗</b>
         </a>
         <a class="service-item reveal" href="service-concept.html">
-<a class="service-item reveal" href="service-concept.html">
   <span>05</span>
   <div>
     <h3>Concept cá nhân</h3>
@@ -297,7 +319,7 @@
           <p class="eyebrow">OUR VISUAL LANGUAGE</p>
           <h2>Selected<br><em>works.</em></h2>
         </div>
-        <p>Những hình ảnh đại diện cho cách D+Đ nhìn thế giới: tối giản, điện ảnh và giàu cảm xúc.</p>
+        <p>Những hình ảnh đại diện cho cách L’Aura nhìn thế giới: tối giản, điện ảnh và giàu cảm xúc.</p>
       </div>
 
       <div class="gallery">
@@ -328,7 +350,7 @@
     <section class="blog section" id="blog">
       <div class="section-label">04 / JOURNAL</div>
       <div class="section-heading">
-        <p class="eyebrow">D+Đ JOURNAL</p>
+        <p class="eyebrow">L'AURA JOURNAL</p>
         <h2>Stories &<br><em>knowledge.</em></h2>
       </div>
       <div class="blog-toolbar">
@@ -394,7 +416,7 @@
         <div>
           <p class="eyebrow">LET'S CREATE</p>
           <h2>Bạn có một<br><em>ý tưởng?</em></h2>
-          <p class="booking-copy">Hãy kể cho chúng tôi nghe. D+Đ sẽ cùng bạn biến nó thành hình ảnh.</p>
+          <p class="booking-copy">Hãy kể cho chúng tôi nghe. L’Aura sẽ cùng bạn biến nó thành hình ảnh.</p>
         </div>
 
         <form id="bookingForm" class="booking-form">
@@ -423,10 +445,8 @@
           <div><span>PHONE</span><p>09xx xxx xxx</p></div>
           <div><span>EMAIL</span><p>LauraStudio@gmail.com</p></div>
           <div><span>SOCIAL</span><p>
-            <a href="https://www.instagram.com/_bachnien_/" class="btn-link">Instagram</a><p>   
-            <a href="https://www.facebook.com/profile.php?id=61579669186355&locale=vi_VN" class="btn-link">Facebook</a><p>
-
-          </p>
+            <a href="https://www.instagram.com/_bachnien_/" class="btn-link" target="_blank" rel="noopener noreferrer">Instagram</a> ·
+            <a href="https://www.facebook.com/profile.php?id=61579669186355&locale=vi_VN" class="btn-link" target="_blank" rel="noopener noreferrer">Facebook</a>
           </div>
         </div>
       </div>
@@ -434,8 +454,8 @@
   </main>
 
   <footer>
-    <div class="logo">D<span>+</span>Đ</div>
-    <p>© <span id="year"></span> D+Đ Studio. All rights reserved.</p>
+    <div class="logo">L'<span>Aura</span> Studio</div>
+    <p>© <span id="year"></span> L'Aura Studio. All rights reserved.</p>
     <a href="#home">Back to top ↑</a>
   </footer>
 
@@ -444,7 +464,7 @@
     <div class="admin-panel">
       <button class="admin-close" id="adminClose">×</button>
       <div class="admin-login" id="adminLogin">
-        <p class="eyebrow">D+Đ CMS</p>
+        <p class="eyebrow">L'AURA CMS</p>
         <h2>Admin<br><em>Dashboard.</em></h2>
         <p class="admin-muted">Đăng nhập để quản lý bài viết.</p>
         <form id="adminLoginForm">
@@ -453,12 +473,13 @@
           <button class="btn btn-dark" type="submit">Đăng nhập <span>↗</span></button>
           <p class="admin-error" id="adminError"></p>
         </form>
-        <small>Demo: admin@studio.com / 123456</small>
+        
       </div>
 
       <div class="admin-dashboard" id="adminDashboard" hidden>
+        
         <div class="admin-top">
-          <div><p class="eyebrow">D+Đ CMS</p><h2>Quản lý <em>bài viết.</em></h2></div>
+          <div><p class="eyebrow">L'AURA CMS</p><h2>Quản lý <em>bài viết.</em></h2></div>
           <button class="admin-logout" id="adminLogout">Đăng xuất</button>
         </div>
 
@@ -466,6 +487,10 @@
           <button class="admin-tab active" data-admin-tab="posts">Bài viết</button>
           <button class="admin-tab" data-admin-tab="new">+ Viết bài</button>
           <button class="admin-tab" data-admin-tab="contacts">Liên hệ</button>
+          <button class="admin-tab" data-admin-tab="portfolio">
+  Portfolio
+</button>
+          <button class="admin-tab" data-admin-tab="comments">Bình luận</button>
         </div>
 
         <div class="admin-tab-content active" id="adminPostsTab">
@@ -499,6 +524,37 @@
               <button type="button" class="admin-secondary" id="postCancel">Hủy</button>
             </div>
           </form>
+        </div>
+
+        <div class="admin-tab-content" id="adminPortfolioTab">
+          <div class="admin-section-head">
+            <div><p class="eyebrow">VISUAL CMS</p><h3>Quản lý Portfolio</h3><p>Thêm, sửa, xóa và sắp xếp hình ảnh hiển thị.</p></div>
+            <button type="button" class="btn btn-dark" id="addPortfolioBtn">+ Thêm ảnh</button>
+          </div>
+          <div class="admin-stats"><div><span id="portfolioCount">0</span><small>Hình ảnh</small></div><div><span id="portfolioPageCount">0</span><small>Trang chính</small></div></div>
+          <div id="portfolioAdminList" class="portfolio-admin-list"></div>
+          <form id="portfolioAdminForm" class="post-form portfolio-form" hidden>
+            <input type="hidden" id="portfolioEditId">
+            <div class="form-two"><label>Tên ảnh<input id="portfolioTitle" required placeholder="Editorial Portrait"></label><label>Danh mục<input id="portfolioCategory" required placeholder="Portrait"></label></div>
+            <div class="form-two"><label>Trang hiển thị<select id="portfolioPage"><option value="portfolio">Portfolio chính</option><option value="concept">Concept cá nhân</option><option value="costume">Cổ trang</option><option value="portrait">Portrait</option><option value="fashion">Fashion & Beauty</option><option value="wedding">Wedding</option><option value="brand">Brand Campaign</option></select></label><label>Bố cục<select id="portfolioLayout"><option value="normal">Normal</option><option value="large">Large</option><option value="tall">Tall</option><option value="wide">Wide</option></select></label></div>
+            <label>URL hình ảnh<input type="url" id="portfolioImage" required placeholder="https://..."></label>
+            <div id="portfolioImagePreview" class="portfolio-image-preview" hidden><img id="portfolioPreviewImg" alt="Xem trước ảnh portfolio"></div>
+            <div class="post-form-actions"><button type="submit" class="btn btn-dark">Lưu ảnh ↗</button><button type="button" class="admin-secondary" id="cancelPortfolioBtn">Hủy</button></div>
+          </form>
+        </div>
+
+        <div class="admin-tab-content" id="adminCommentsTab">
+          <div class="admin-section-head">
+            <div>
+              <p class="eyebrow">COMMUNITY</p>
+              <h3>Quản lý bình luận</h3>
+              <p>Admin có thể xem và xóa mọi bình luận. Người dùng chỉ có thể xóa bình luận do chính họ đăng.</p>
+            </div>
+          </div>
+          <div class="admin-stats">
+            <div><span id="adminCommentCount">0</span><small>Bình luận</small></div>
+          </div>
+          <div id="adminCommentList" class="admin-comment-list"></div>
         </div>
       </div>
     </div>

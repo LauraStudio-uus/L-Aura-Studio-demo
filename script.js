@@ -2096,6 +2096,10 @@ function deleteComment(
     currentArticleId
   );
 
+  if (typeof renderAdminComments === "function") {
+    renderAdminComments();
+  }
+
 }
 
 
@@ -2144,12 +2148,27 @@ const adminLogin =
 const adminDashboard =
   document.getElementById(
     "adminDashboard"
-    
   );
-renderAdminComments();
-renderAdminUsers();
-renderAdminComments();
-renderAdminUsers();
+
+/*
+ * Admin session helpers
+ * Login trước đây lưu "1" nhưng một số chức năng lại kiểm tra "true",
+ * khiến Admin bị báo hết phiên ngay cả khi vừa đăng nhập.
+ */
+const ADMIN_SESSION_KEY = "ddAdmin";
+
+function isAdminAuthenticated() {
+  const value = sessionStorage.getItem(ADMIN_SESSION_KEY);
+  return value === "1" || value === "true";
+}
+
+function setAdminAuthenticated() {
+  sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+}
+
+function clearAdminAuthenticated() {
+  sessionStorage.removeItem(ADMIN_SESSION_KEY);
+}
 
 function openAdmin() {
 
@@ -2168,11 +2187,7 @@ function openAdmin() {
   );
 
 
-  if (
-    sessionStorage.getItem(
-      "ddAdmin"
-    ) === "1"
-  ) {
+  if (isAdminAuthenticated()) {
 
     showDashboard();
 
@@ -2292,10 +2307,7 @@ if (adminLoginForm) {
           "123456"
       ) {
 
-        sessionStorage.setItem(
-          "ddAdmin",
-          "1"
-        );
+        setAdminAuthenticated();
 
 
         if (error) {
@@ -2340,6 +2352,18 @@ function showDashboard() {
 
   renderAdminContacts();
 
+  if (typeof renderAdminPortfolio === "function") {
+    renderAdminPortfolio();
+  }
+
+  if (typeof renderAdminComments === "function") {
+    renderAdminComments();
+  }
+
+  if (typeof renderAdminUsers === "function") {
+    renderAdminUsers();
+  }
+
 }
 
 
@@ -2368,9 +2392,7 @@ if (adminLogout) {
     "click",
     () => {
 
-      sessionStorage.removeItem(
-        "ddAdmin"
-      );
+      clearAdminAuthenticated();
 
       showAdminLogin();
 
@@ -2433,7 +2455,13 @@ document
               "adminNewTab",
 
             contacts:
-              "adminContactsTab"
+              "adminContactsTab",
+
+            portfolio:
+              "adminPortfolioTab",
+
+            comments:
+              "adminCommentsTab"
 
           }[
             tab.dataset.adminTab
@@ -2462,6 +2490,13 @@ document
 
           renderAdminContacts();
 
+        }
+
+        if (
+          tab.dataset.adminTab ===
+          "comments"
+        ) {
+          renderAdminComments();
         }
 
       }
@@ -3257,147 +3292,72 @@ updateCommentUI();
    ADMIN COMMENT MANAGEMENT
 ========================= */
 
-function getComments() {
-  return JSON.parse(
-    localStorage.getItem("ddStudioComments") || "[]"
-  );
+function getPostTitleById(postId) {
+  const post = getPosts().find(item => item.id === postId);
+  return post ? post.title : "Bài viết không xác định";
 }
-
-function saveComments(comments) {
-  localStorage.setItem(
-    "ddStudioComments",
-    JSON.stringify(comments)
-  );
-}
-
-function getUsers() {
-  return JSON.parse(
-    localStorage.getItem("ddStudioUsers") || "[]"
-  );
-}
-
-function saveUsers(users) {
-  localStorage.setItem(
-    "ddStudioUsers",
-    JSON.stringify(users)
-  );
-}
-
-
-/* =========================
-   RENDER ADMIN COMMENTS
-========================= */
 
 function renderAdminComments() {
-
-  const container =
-    document.getElementById("adminCommentList");
-
-  const count =
-    document.getElementById("adminCommentCount");
+  const container = document.getElementById("adminCommentList");
+  const count = document.getElementById("adminCommentCount");
 
   if (!container) return;
 
-  const comments = getComments();
+  const comments = getComments()
+    .slice()
+    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
-  if (count) {
-    count.textContent = comments.length;
-  }
+  if (count) count.textContent = comments.length;
 
   if (!comments.length) {
-
-    container.innerHTML = `
-      <div class="admin-comment-row">
-        <p style="color:#777">
-          Chưa có bình luận nào.
-        </p>
-      </div>
-    `;
-
+    container.innerHTML = `<div class="admin-comment-row"><p class="admin-muted">Chưa có bình luận nào.</p></div>`;
     return;
   }
 
-  container.innerHTML = comments
-    .slice()
-    .reverse()
-    .map(comment => {
+  container.innerHTML = comments.map(comment => {
+    const createdAt = comment.createdAt
+      ? new Date(comment.createdAt).toLocaleString("vi-VN")
+      : "Không rõ thời gian";
 
-      const date = comment.date
-        ? new Date(comment.date).toLocaleString("vi-VN")
-        : "";
-
-      return `
-        <div class="admin-comment-row">
-
-          <div class="admin-comment-head">
-
-            <div>
-              <div class="admin-comment-author">
-                ${escapeHTML(comment.userName || "Người dùng")}
-              </div>
-
-              <div class="admin-comment-meta">
-                ${escapeHTML(comment.userEmail || "")}
-                · ${escapeHTML(date)}
-              </div>
-            </div>
-
-            <button
-              class="admin-danger"
-              onclick="adminDeleteComment('${comment.id}')">
-              Xóa
-            </button>
-
+    return `
+      <div class="admin-comment-row">
+        <div class="admin-comment-head">
+          <div>
+            <div class="admin-comment-author">${escapeHTML(comment.name || "Người dùng")}</div>
+            <div class="admin-comment-meta">${escapeHTML(comment.email || "")} · ${escapeHTML(createdAt)}</div>
           </div>
-
-          <div class="admin-comment-article">
-            Bài viết:
-            ${escapeHTML(comment.articleTitle || comment.articleId || "Không xác định")}
-          </div>
-
-          <div class="admin-comment-text">
-            ${escapeHTML(comment.text || "")}
-          </div>
-
+          <button type="button" class="admin-danger" data-admin-delete-comment="${escapeHTML(comment.id)}">Xóa</button>
         </div>
-      `;
+        <div class="admin-comment-article">Bài viết: ${escapeHTML(getPostTitleById(comment.postId))}</div>
+        <div class="admin-comment-text">${escapeHTML(comment.text || "")}</div>
+      </div>`;
+  }).join("");
 
-    })
-    .join("");
+  container.querySelectorAll("[data-admin-delete-comment]").forEach(button => {
+    button.addEventListener("click", () => adminDeleteComment(button.dataset.adminDeleteComment));
+  });
 }
 
-
-/* =========================
-   DELETE COMMENT
-========================= */
-
 function adminDeleteComment(commentId) {
+  /* Chỉ cho phép thao tác này khi phiên Admin đang đăng nhập. */
+  if (!isAdminAuthenticated()) {
+    alert("Phiên Admin không hợp lệ. Vui lòng đăng nhập lại.");
+    showAdminLogin();
+    return;
+  }
 
   const comments = getComments();
-
-  const comment =
-    comments.find(c => String(c.id) === String(commentId));
-
+  const comment = comments.find(item => String(item.id) === String(commentId));
   if (!comment) return;
 
-  const confirmed = confirm(
-    `Bạn có chắc muốn xóa bình luận của "${comment.userName}"?`
-  );
-
+  const confirmed = confirm(`Xóa bình luận của "${comment.name || "Người dùng"}"?`);
   if (!confirmed) return;
 
-  const updated =
-    comments.filter(
-      c => String(c.id) !== String(commentId)
-    );
-
-  saveComments(updated);
-
+  saveComments(comments.filter(item => String(item.id) !== String(commentId)));
   renderAdminComments();
 
-  // Cập nhật bình luận đang hiển thị trên bài viết
-  if (typeof renderComments === "function") {
-    renderComments();
+  if (currentArticleId) {
+    renderComments(currentArticleId);
   }
 }
 
@@ -3539,3 +3499,95 @@ function adminDeleteUser(userId) {
 
   renderAdminUsers();
 }
+
+
+/* =========================================================
+   2026 PREMIUM UPGRADE — PORTFOLIO CMS
+========================================================= */
+const PORTFOLIO_KEY = "lauraStudioPortfolio";
+
+function seedPortfolioFromMarkup(){
+  if(localStorage.getItem(PORTFOLIO_KEY)!==null) return;
+  const items=[...document.querySelectorAll("#portfolio .gallery-card")].map((card,index)=>({
+    id:`portfolio-${Date.now()}-${index}`,
+    title:card.querySelector("img")?.alt || `Portfolio ${index+1}`,
+    category:(card.querySelector("span")?.textContent || "Portfolio").split("/")[0].trim(),
+    page:"portfolio",
+    layout:["large","tall","wide"].find(c=>card.classList.contains(c)) || "normal",
+    image:card.dataset.image || card.querySelector("img")?.src || ""
+  }));
+  localStorage.setItem(PORTFOLIO_KEY,JSON.stringify(items));
+}
+function getPortfolioItems(){try{const v=JSON.parse(localStorage.getItem(PORTFOLIO_KEY)||"[]");return Array.isArray(v)?v:[]}catch{return []}}
+function savePortfolioItems(items){localStorage.setItem(PORTFOLIO_KEY,JSON.stringify(items))}
+function currentPortfolioPage(){
+  const file=(location.pathname.split("/").pop()||"index.html").toLowerCase();
+  return ({"index.html":"portfolio","":"portfolio","service-concept.html":"concept","service-costume.html":"costume","service-portrait.html":"portrait","service-fashion.html":"fashion","service-wedding.html":"wedding","service-brand.html":"brand"})[file]||"portfolio";
+}
+function renderDynamicPortfolio(){
+  const gallery=document.querySelector("#portfolio .gallery"); if(!gallery)return;
+  const items=getPortfolioItems().filter(x=>x.page===currentPortfolioPage());
+  gallery.innerHTML=items.map((x,i)=>`<button type="button" class="gallery-card ${escapeHTML(x.layout||"normal")}" data-image="${escapeHTML(x.image)}" aria-label="Mở ảnh ${escapeHTML(x.title)}"><img src="${escapeHTML(x.image)}" alt="${escapeHTML(x.title)}" loading="lazy" decoding="async"><span>${escapeHTML(x.category)} / ${String(i+1).padStart(2,"0")}</span></button>`).join("");
+}
+function renderAdminPortfolio(){
+  const list=document.getElementById("portfolioAdminList"); if(!list)return;
+  const items=getPortfolioItems();
+  const total=document.getElementById("portfolioCount"), main=document.getElementById("portfolioPageCount");
+  if(total)total.textContent=items.length;if(main)main.textContent=items.filter(x=>x.page==="portfolio").length;
+  list.innerHTML=items.length?items.map(x=>`<div class="portfolio-admin-row"><img src="${escapeHTML(x.image)}" alt=""><div><h4>${escapeHTML(x.title)}</h4><p>${escapeHTML(x.category)} · ${escapeHTML(x.page)} · ${escapeHTML(x.layout)}</p></div><div class="admin-row-actions"><button type="button" data-portfolio-edit="${escapeHTML(x.id)}">Sửa</button><button type="button" data-portfolio-delete="${escapeHTML(x.id)}">Xóa</button></div></div>`).join(""):'<p class="admin-muted">Chưa có hình ảnh.</p>';
+}
+function resetPortfolioForm(){
+  const f=document.getElementById("portfolioAdminForm");if(!f)return;f.reset();document.getElementById("portfolioEditId").value="";document.getElementById("portfolioImagePreview").hidden=true;
+}
+function openPortfolioForm(item=null){
+  const f=document.getElementById("portfolioAdminForm");if(!f)return;resetPortfolioForm();f.hidden=false;
+  if(item){document.getElementById("portfolioEditId").value=item.id;document.getElementById("portfolioTitle").value=item.title;document.getElementById("portfolioCategory").value=item.category;document.getElementById("portfolioPage").value=item.page;document.getElementById("portfolioLayout").value=item.layout;document.getElementById("portfolioImage").value=item.image;showPortfolioPreview(item.image)}
+  document.getElementById("portfolioTitle")?.focus();
+}
+function showPortfolioPreview(url){const box=document.getElementById("portfolioImagePreview"),img=document.getElementById("portfolioPreviewImg");if(!box||!img)return;if(!url){box.hidden=true;return}img.src=url;box.hidden=false}
+
+seedPortfolioFromMarkup();
+renderDynamicPortfolio();
+
+document.getElementById("addPortfolioBtn")?.addEventListener("click",()=>openPortfolioForm());
+document.getElementById("cancelPortfolioBtn")?.addEventListener("click",()=>{resetPortfolioForm();document.getElementById("portfolioAdminForm").hidden=true});
+document.getElementById("portfolioImage")?.addEventListener("input",e=>showPortfolioPreview(e.target.value.trim()));
+document.getElementById("portfolioAdminForm")?.addEventListener("submit",e=>{
+  e.preventDefault();const items=getPortfolioItems(),id=document.getElementById("portfolioEditId").value;
+  const item={id:id||`portfolio-${Date.now()}`,title:document.getElementById("portfolioTitle").value.trim(),category:document.getElementById("portfolioCategory").value.trim(),page:document.getElementById("portfolioPage").value,layout:document.getElementById("portfolioLayout").value,image:document.getElementById("portfolioImage").value.trim()};
+  const i=items.findIndex(x=>x.id===id);if(i>=0)items[i]=item;else items.unshift(item);savePortfolioItems(items);renderAdminPortfolio();renderDynamicPortfolio();resetPortfolioForm();e.target.hidden=true;
+});
+document.getElementById("portfolioAdminList")?.addEventListener("click",e=>{
+  const edit=e.target.closest("[data-portfolio-edit]"),del=e.target.closest("[data-portfolio-delete]");
+  if(edit){const item=getPortfolioItems().find(x=>x.id===edit.dataset.portfolioEdit);if(item)openPortfolioForm(item)}
+  if(del&&confirm("Bạn có chắc muốn xóa ảnh này?")){savePortfolioItems(getPortfolioItems().filter(x=>x.id!==del.dataset.portfolioDelete));renderAdminPortfolio();renderDynamicPortfolio()}
+});
+// Delegation keeps lightbox working for images created by Admin after page load.
+document.querySelector("#portfolio .gallery")?.addEventListener("click",e=>{const card=e.target.closest(".gallery-card");if(card?.dataset.image)openImageModal(card.dataset.image)});
+
+/* =========================================================
+   LIGHT / DARK THEME
+   ========================================================= */
+const themeToggle=document.getElementById("themeToggle");
+const themeIcon=document.getElementById("themeIcon");
+const themeMeta=document.querySelector('meta[name="theme-color"]');
+function applyLauraTheme(theme,{persist=true}={}){
+  const next=theme==="dark"?"dark":"light";
+  document.documentElement.dataset.theme=next;
+  if(persist){try{localStorage.setItem("lauraTheme",next)}catch(_){}}
+  if(themeIcon)themeIcon.textContent=next==="dark"?"☀":"☾";
+  if(themeToggle){
+    const label=next==="dark"?"Chuyển sang chế độ sáng":"Chuyển sang chế độ tối";
+    themeToggle.setAttribute("aria-label",label);themeToggle.title=label;
+  }
+  if(themeMeta)themeMeta.setAttribute("content",next==="dark"?"#10100f":"#f7f3eb");
+}
+function initialLauraTheme(){
+  let saved=null;try{saved=localStorage.getItem("lauraTheme")}catch(_){}
+  if(saved==="dark"||saved==="light")return saved;
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches?"dark":"light";
+}
+applyLauraTheme(document.documentElement.dataset.theme||initialLauraTheme(),{persist:false});
+themeToggle?.addEventListener("click",()=>applyLauraTheme(document.documentElement.dataset.theme==="dark"?"light":"dark"));
+const systemTheme=window.matchMedia?.("(prefers-color-scheme: dark)");
+systemTheme?.addEventListener?.("change",event=>{let saved=null;try{saved=localStorage.getItem("lauraTheme")}catch(_){}if(!saved)applyLauraTheme(event.matches?"dark":"light",{persist:false})});

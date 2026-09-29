@@ -3,7 +3,7 @@
   --bg:#f7f3eb;
   --surface:#fffdf8;
   --surface-2:#eee8dc;
-  --text:#cfb286ac;
+  --text:#29251f;
   --muted:#817b70;
   --line:#d8d0c2;
   --accent:#a89570;
@@ -685,3 +685,46 @@ footer{padding:25px 7vw;gap:15px;flex-wrap:wrap}
   color: #8a7651;
   background: transparent;
 }
+
+/* =========================================================
+   2026 PREMIUM UPGRADE — L'AURA STUDIO
+========================================================= */
+:root{--shadow:0 24px 70px rgba(41,37,31,.12);--radius:2px}
+::selection{background:#29251f;color:#fffdf8}.skip-link{position:fixed;left:16px;top:-60px;z-index:9999;background:#29251f;color:#fff;padding:12px 16px}.skip-link:focus{top:16px}
+:focus-visible{outline:2px solid #a89570;outline-offset:4px}.header.scrolled{box-shadow:0 8px 30px rgba(41,37,31,.06)}
+.hero-content,.hero-meta,.scroll-down{z-index:2}.hero h1{color:#fff}.section h2,.portfolio-head h2,.process h2,.contact h2{color:#29251f}.process h2,.contact h2{color:#fffdf8}
+.admin-section-head{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:25px}.admin-section-head h3{font:500 30px/1.1 "Playfair Display",serif;margin:5px 0}.admin-section-head p{color:#777;font-size:12px}
+.portfolio-admin-list{display:grid;gap:10px}.portfolio-admin-row{display:grid;grid-template-columns:110px 1fr auto;gap:18px;align-items:center;background:#e1ddd5;padding:12px}.portfolio-admin-row img{width:110px;height:82px;object-fit:cover}.portfolio-admin-row h4{font-size:15px}.portfolio-admin-row p{font-size:10px;color:#777;margin-top:5px}.portfolio-form{margin-top:32px;padding:28px;background:#e7e2d9}.portfolio-image-preview{margin-top:4px}.portfolio-image-preview img{width:min(300px,100%);height:190px;object-fit:cover;box-shadow:var(--shadow)}
+.gallery-card{cursor:zoom-in}.gallery-card:focus-visible{outline:3px solid #a89570;outline-offset:3px}.gallery-card img{background:#e8e2d8}.blog-card{transition:transform .3s ease,box-shadow .3s ease}.blog-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media(max-width:850px){.portfolio-admin-row{grid-template-columns:80px 1fr}.portfolio-admin-row img{width:80px;height:65px}.portfolio-admin-row .admin-row-actions{grid-column:2}.admin-section-head{flex-direction:column}.admin-tabs{overflow-x:auto;white-space:nowrap}}
+@media(max-width:600px){.hero h1{font-size:clamp(48px,16vw,68px)}.hero-actions{align-items:flex-start;flex-direction:column}.booking-form{grid-template-columns:1fr}.booking-form .full{grid-column:auto}.contact-info{grid-template-columns:1fr}.admin-stats{overflow-x:auto}.portfolio-form{padding:18px}}
+
+/* ADMIN COMMENTS */
+.admin-comment-list{display:grid;gap:12px}.admin-comment-row{padding:20px;background:#e8e3da;border:1px solid #d8d0c2}.admin-comment-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}.admin-danger{padding:8px 12px;font-size:10px;text-transform:uppercase;letter-spacing:1px;cursor:pointer}.comment-delete{transition:.2s}.comment-delete:hover{color:#6f2e28;text-decoration:underline}@media(max-width:600px){.admin-comment-head{gap:12px}.admin-comment-row{padding:16px}}
+
+/* =========================================================
+   PREMIUM LIGHT / DARK THEME
+   ========================================================= */
+:root{color-scheme:light;--theme-bg:#f7f3eb;--theme-surface:#fffdf8;--theme-surface-2:#eee8dc;--theme-text:#29251f;--theme-muted:#817b70;--theme-line:#d8d0c2}
+html[data-theme="dark"]{color-scheme:dark;--theme-bg:#10100f;--theme-surface:#171715;--theme-surface-2:#20201d;--theme-text:#f3efe7;--theme-muted:#aaa398;--theme-line:#35332f}
+body,.header,.services,.portfolio,.pricing,.booking,.contact,.quote-section,.price-card,.account-panel,.admin-panel,.article-panel,.comment-item,.blog-card,.profile-card,.portfolio-form,.admin-comment-row{transition:background-color .32s ease,color .32s ease,border-color .32s ease,box-shadow .32s ease}
+.theme-toggle{width:38px;height:38px;flex:0 0 38px;display:inline-grid;place-items:center;border:1px solid rgba(80,70,55,.28);border-radius:50%;background:transparent;color:#29251f;cursor:pointer;transition:transform .25s ease,background .25s ease,color .25s ease,border-color .25s ease}
+.theme-toggle:hover{transform:rotate(12deg);background:#29251f;color:#fff}.theme-toggle-icon{font-size:17px;line-height:1}
+html[data-theme="dark"] body{background:#10100f;color:#f3efe7}
+html[data-theme="dark"] .header{background:rgba(16,16,15,.88);border-color:#302f2b}
+html[data-theme="dark"] .logo,html[data-theme="dark"] .nav a:hover,html[data-theme="dark"] .account-btn,html[data-theme="dark"] .admin-link{color:#f3efe7}
+html[data-theme="dark"] .nav a{color:#aaa398}html[data-theme="dark"] .header-btn{color:#f3efe7;border-color:#555149}
+html[data-theme="dark"] .theme-toggle{color:#f3efe7;border-color:#555149}html[data-theme="dark"] .theme-toggle:hover{background:#f3efe7;color:#171715}
+html[data-theme="dark"] .intro,html[data-theme="dark"] .portfolio,html[data-theme="dark"] .pricing,html[data-theme="dark"] .blog,html[data-theme="dark"] .contact{background:#10100f;color:#f3efe7}
+html[data-theme="dark"] .services,html[data-theme="dark"] .quote-section{background:#171715;color:#f3efe7}
+html[data-theme="dark"] .service-list,html[data-theme="dark"] .service-item{border-color:#35332f}html[data-theme="dark"] .service-item p,html[data-theme="dark"] .intro-copy p:not(.lead),html[data-theme="dark"] .portfolio-head>p{color:#aaa398}
+html[data-theme="dark"] .price-grid{background:#35332f}html[data-theme="dark"] .price-card{background:#171715;color:#f3efe7}html[data-theme="dark"] .price-card.featured{background:#24231f;color:#fff}html[data-theme="dark"] .price-card li{border-color:#35332f;color:#aaa398}
+html[data-theme="dark"] .booking{background:#10100f}html[data-theme="dark"] .booking-box{background:#171715;color:#f3efe7}html[data-theme="dark"] .booking-form{background:#20201d}html[data-theme="dark"] .booking-form input,html[data-theme="dark"] .booking-form select,html[data-theme="dark"] .booking-form textarea{color:#f3efe7;border-color:#555149}html[data-theme="dark"] .booking-form select option{background:#20201d;color:#f3efe7}
+html[data-theme="dark"] .account-panel,html[data-theme="dark"] .article-panel,html[data-theme="dark"] .admin-panel{background:#171715;color:#f3efe7}html[data-theme="dark"] .account-close,html[data-theme="dark"] .article-close,html[data-theme="dark"] .admin-close{color:#f3efe7}html[data-theme="dark"] .account-view input,html[data-theme="dark"] .admin-panel input,html[data-theme="dark"] .admin-panel textarea,html[data-theme="dark"] .admin-panel select{color:#f3efe7;border-color:#555149;background:transparent}html[data-theme="dark"] .admin-panel select option{background:#20201d;color:#f3efe7}
+html[data-theme="dark"] .profile-card,html[data-theme="dark"] .comment-item,html[data-theme="dark"] .comment-login-message,html[data-theme="dark"] .admin-comment-row,html[data-theme="dark"] .portfolio-form{background:#20201d;border-color:#35332f;color:#f3efe7}html[data-theme="dark"] .comment-body{color:#bbb4a9}html[data-theme="dark"] .comment-form textarea{background:#171715;color:#fff;border-color:#44433e}
+html[data-theme="dark"] .blog-card{background:#171715;color:#f3efe7}html[data-theme="dark"] .blog-card p,html[data-theme="dark"] .blog-card-meta{color:#aaa398}
+html[data-theme="dark"] .admin-tab{color:#aaa398;border-color:#35332f}html[data-theme="dark"] .admin-tab.active{color:#fff;border-color:#f3efe7}html[data-theme="dark"] .admin-post-item,html[data-theme="dark"] .contact-item,html[data-theme="dark"] .portfolio-admin-row{border-color:#35332f;background:#20201d}
+html[data-theme="dark"] footer{background:#0c0c0b;border-color:#2b2b2b}
+@media(max-width:850px){html[data-theme="dark"] .nav{background:#10100f;border-color:#302f2b}.theme-toggle{width:36px;height:36px;flex-basis:36px}}
+@media(prefers-reduced-motion:reduce){body,.header,.services,.portfolio,.pricing,.booking,.contact,.quote-section,.price-card,.account-panel,.admin-panel,.article-panel,.comment-item,.blog-card,.profile-card,.portfolio-form,.admin-comment-row,.theme-toggle{transition:none!important}}
