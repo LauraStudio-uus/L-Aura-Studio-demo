@@ -12,6 +12,8 @@
         const saved = localStorage.getItem("lauraTheme");
         const dark = saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.dataset.theme = dark ? "dark" : "light";
+        const themeMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeMeta) themeMeta.setAttribute("content", dark ? "#111315" : "#f7f3eb");
       } catch (_) {
         document.documentElement.dataset.theme = "light";
       }
@@ -40,6 +42,7 @@
       <a href="#about">Studio</a>
       <a href="#services">Dịch vụ</a>
       <a href="#portfolio">Portfolio</a>
+      <a href="#video">Video</a>
       <a href="#pricing">Bảng giá</a>
       <a href="#blog">Bài viết</a>
       <a href="#contact">Liên hệ</a>
@@ -347,8 +350,21 @@
     </section>
 
 
+    <section class="video-showcase section" id="video">
+      <div class="section-label">04 / FILM & REELS</div>
+      <div class="video-head">
+        <div>
+          <p class="eyebrow">MOTION BY L'AURA</p>
+          <h2>Film &<br><em>reels.</em></h2>
+        </div>
+        <p>Behind the scenes, fashion film, campaign reel và những câu chuyện chuyển động từ L’Aura Studio.</p>
+      </div>
+      <div class="video-grid" id="videoGrid"></div>
+      <div class="video-empty" id="videoEmpty">Chưa có video. Admin có thể đăng video từ Dashboard.</div>
+    </section>
+
     <section class="blog section" id="blog">
-      <div class="section-label">04 / JOURNAL</div>
+      <div class="section-label">05 / JOURNAL</div>
       <div class="section-heading">
         <p class="eyebrow">L'AURA JOURNAL</p>
         <h2>Stories &<br><em>knowledge.</em></h2>
@@ -372,7 +388,7 @@
     </section>
 
     <section class="pricing section" id="pricing">
-      <div class="section-label">04 / INVESTMENT</div>
+      <div class="section-label">06 / INVESTMENT</div>
       <div class="section-heading">
         <p class="eyebrow">PACKAGES</p>
         <h2>Đầu tư cho<br><em>hình ảnh.</em></h2>
@@ -399,7 +415,7 @@
     </section>
 
     <section class="process section">
-      <div class="section-label">05 / PROCESS</div>
+      <div class="section-label">07 / PROCESS</div>
       <div class="process-grid">
         <div><p class="eyebrow">FROM IDEA TO IMAGE</p><h2>Quy trình<br><em>làm việc.</em></h2></div>
         <div class="steps">
@@ -437,7 +453,7 @@
     </section>
 
     <section class="contact section" id="contact">
-      <div class="section-label">06 / CONTACT</div>
+      <div class="section-label">08 / CONTACT</div>
       <div class="contact-grid">
         <div><p class="eyebrow">COME SAY HELLO</p><h2>Let's make<br><em>something.</em></h2></div>
         <div class="contact-info">
@@ -479,7 +495,7 @@
       <div class="admin-dashboard" id="adminDashboard" hidden>
         
         <div class="admin-top">
-          <div><p class="eyebrow">L'AURA CMS</p><h2>Quản lý <em>bài viết.</em></h2></div>
+          <div><p class="eyebrow">L'AURA CMS</p><h2>Quản lý <em>nội dung.</em></h2></div>
           <button class="admin-logout" id="adminLogout">Đăng xuất</button>
         </div>
 
@@ -487,9 +503,8 @@
           <button class="admin-tab active" data-admin-tab="posts">Bài viết</button>
           <button class="admin-tab" data-admin-tab="new">+ Viết bài</button>
           <button class="admin-tab" data-admin-tab="contacts">Liên hệ</button>
-          <button class="admin-tab" data-admin-tab="portfolio">
-  Portfolio
-</button>
+          <button class="admin-tab" data-admin-tab="portfolio">Portfolio</button>
+          <button class="admin-tab" data-admin-tab="videos">Video</button>
           <button class="admin-tab" data-admin-tab="comments">Bình luận</button>
         </div>
 
@@ -540,6 +555,36 @@
             <label>URL hình ảnh<input type="url" id="portfolioImage" required placeholder="https://..."></label>
             <div id="portfolioImagePreview" class="portfolio-image-preview" hidden><img id="portfolioPreviewImg" alt="Xem trước ảnh portfolio"></div>
             <div class="post-form-actions"><button type="submit" class="btn btn-dark">Lưu ảnh ↗</button><button type="button" class="admin-secondary" id="cancelPortfolioBtn">Hủy</button></div>
+          </form>
+        </div>
+
+        <div class="admin-tab-content" id="adminVideosTab">
+          <div class="admin-section-head">
+            <div>
+              <p class="eyebrow">MOTION CMS</p>
+              <h3>Quản lý Video</h3>
+              <p>Đăng YouTube, Vimeo hoặc file MP4/WebM bằng URL. Không lưu file video trực tiếp trong localStorage.</p>
+            </div>
+            <button type="button" class="btn btn-dark" id="addVideoBtn">+ Thêm video</button>
+          </div>
+          <div class="admin-stats">
+            <div><span id="videoCount">0</span><small>Video</small></div>
+          </div>
+          <div id="videoAdminList" class="video-admin-list"></div>
+          <form id="videoAdminForm" class="post-form video-form" hidden>
+            <input type="hidden" id="videoEditId">
+            <div class="form-two">
+              <label>Tiêu đề<input id="videoTitle" required placeholder="Fashion Film — No.01"></label>
+              <label>Danh mục<input id="videoCategory" placeholder="Fashion Film / BTS / Reel"></label>
+            </div>
+            <label>URL video<input type="url" id="videoUrl" required placeholder="YouTube / Vimeo / https://...video.mp4"></label>
+            <label>Thumbnail (không bắt buộc)<input type="url" id="videoThumbnail" placeholder="https://...jpg"></label>
+            <label>Mô tả<textarea id="videoDescription" rows="3" placeholder="Mô tả ngắn về video..."></textarea></label>
+            <div id="videoPreview" class="video-admin-preview" hidden></div>
+            <div class="post-form-actions">
+              <button type="submit" class="btn btn-dark">Lưu video ↗</button>
+              <button type="button" class="admin-secondary" id="cancelVideoBtn">Hủy</button>
+            </div>
           </form>
         </div>
 
@@ -630,6 +675,18 @@
 </section>
       </div>
     </article>
+  </div>
+
+  <div class="video-modal" id="videoModal" aria-hidden="true">
+    <button class="video-modal-close" id="videoModalClose" type="button" aria-label="Đóng video">×</button>
+    <div class="video-modal-shell">
+      <div class="video-player" id="videoPlayer"></div>
+      <div class="video-modal-copy">
+        <p class="eyebrow" id="videoModalCategory"></p>
+        <h2 id="videoModalTitle"></h2>
+        <p id="videoModalDescription"></p>
+      </div>
+    </div>
   </div>
 
   <div class="modal" id="imageModal">
